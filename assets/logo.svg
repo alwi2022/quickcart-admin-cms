@@ -1,0 +1,12 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="190" height="50" viewBox="0 0 190 50" fill="none">
+  <!-- Lingkaran oranye -->
+  <circle cx="20" cy="25" r="20" fill="#F97316"/>
+  <!-- Huruf G putih di dalam lingkaran -->
+  <text x="11" y="33" font-family="Arial, sans-serif" font-size="24" font-weight="bold" fill="white">
+    G
+  </text>
+  <!-- Tulisan "alaTech" diposisikan lebih rapat ke lingkaran -->
+  <text x="44" y="33" font-family="Arial, sans-serif" font-size="26" font-weight="bold" fill="#1E293B">
+    alaTech
+  </text>
+</svg>
