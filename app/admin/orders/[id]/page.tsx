@@ -3,13 +3,14 @@
 import { useEffect, useState } from 'react';
 import { useParams, useRouter } from 'next/navigation';
 import { fmtIDR } from '@/app/db/utils/format';
-import { AdminOrders } from '../page';
+import { AdminOrders } from '../api';
 
 const ORDER_STATUS = ['awaiting_payment','paid','processing','shipped','completed','cancelled','refunded'];
 const PAYMENT_STATUS = ['pending','paid','failed','expired'];
 
 export default function AdminOrderDetailPage() {
   const { id } = useParams();
+  const orderId = Array.isArray(id) ? id[0] : id;
   const router = useRouter();
 
   const [loading, setLoading] = useState(true);
@@ -23,9 +24,10 @@ export default function AdminOrderDetailPage() {
   const [trackingNo, setTrackingNo] = useState('');
 
   async function load() {
+    if (!orderId) return;
     setLoading(true);
     try {
-      const { item } = await AdminOrders.get(id);
+      const { item } = await AdminOrders.get(orderId);
       setO(item);
       setStatus(item.status || '');
       setPaymentStatus(item.payment?.status || '');
@@ -40,28 +42,31 @@ export default function AdminOrderDetailPage() {
     }
   }
 
-  useEffect(() => { load(); /* eslint-disable-next-line */ }, [id]);
+  useEffect(() => { load(); /* eslint-disable-next-line */ }, [orderId]);
 
   async function saveStatus() {
+    if (!orderId) return;
     try {
-      const { item } = await AdminOrders.update(id, { status });
+      const { item } = await AdminOrders.update(orderId, { status });
       setO(prev => ({ ...prev, status: item.status }));
       alert('Status order diperbarui');
     } catch (e) { alert(e.message); }
   }
 
   async function savePayment() {
+    if (!orderId) return;
     try {
-      const { item } = await AdminOrders.update(id, { paymentStatus });
+      const { item } = await AdminOrders.update(orderId, { paymentStatus });
       setO(prev => ({ ...prev, payment: item.payment }));
       alert('Status pembayaran diperbarui');
     } catch (e) { alert(e.message); }
   }
 
   async function saveShipment() {
+    if (!orderId) return;
     try {
       const payload = { shipment: { courier, service, trackingNo } };
-      const { item } = await AdminOrders.update(id, payload);
+      const { item } = await AdminOrders.update(orderId, payload);
       setO(prev => ({ ...prev, shipment: item.shipment }));
       alert('Pengiriman diperbarui');
     } catch (e) { alert(e.message); }
@@ -182,7 +187,13 @@ function Card({ title, children }) {
   );
 }
 
-function Row({ label, value, bold }) {
+type RowProps = {
+  label: string;
+  value: string;
+  bold?: boolean;
+};
+
+function Row({ label, value, bold = false }: RowProps) {
   return (
     <div className={`flex items-center justify-between ${bold ? 'font-semibold' : ''}`}>
       <div>{label}</div><div>{value}</div>

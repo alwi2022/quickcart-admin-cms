@@ -316,7 +316,7 @@ export default function AdminCategoriesPage() {
                                 <input
                                     type="number"
                                     value={order}
-                                    onChange={e => setOrder(e.target.value)}
+                                    onChange={e => setOrder(Number(e.target.value))}
                                     className="mt-1 w-full rounded-lg border border-zinc-300 px-3 py-2 focus:outline-none focus:ring-2 focus:ring-orange-500/30"
                                     placeholder="0"
                                 />

@@ -33,7 +33,15 @@ export default function AdminProductEditPage() {
   const [status, setStatus] = useState('active');
 
   const [variants, setVariants] = useState([
-    { sku: '', options: {}, price: { currency: 'IDR', list: 0, sale: null }, weightGram: null, dimensionsCm: { l: null, w: null, h: null }, barcode: '', status: 'active' }
+    {
+      sku: '',
+      options: {},
+      price: { currency: 'IDR', list: 0, sale: null, startAt: null, endAt: null },
+      weightGram: null,
+      dimensionsCm: { l: null, w: null, h: null },
+      barcode: '',
+      status: 'active',
+    },
   ]);
 
   // LOAD: product + brands + categories
@@ -99,7 +107,18 @@ export default function AdminProductEditPage() {
     setVariants(vs => vs.map((v, i) => (i === idx ? { ...v, ...patch } : v)));
   }
   function addVariant() {
-    setVariants(vs => [...vs, { sku: '', options: {}, price: { currency: 'IDR', list: 0, sale: null }, weightGram: null, dimensionsCm: { l: null, w: null, h: null }, barcode: '', status: 'active' }]);
+    setVariants((vs) => [
+      ...vs,
+      {
+        sku: '',
+        options: {},
+        price: { currency: 'IDR', list: 0, sale: null, startAt: null, endAt: null },
+        weightGram: null,
+        dimensionsCm: { l: null, w: null, h: null },
+        barcode: '',
+        status: 'active',
+      },
+    ]);
   }
   function removeVariant(i) {
     setVariants(vs => vs.filter((_, idx) => idx !== i));

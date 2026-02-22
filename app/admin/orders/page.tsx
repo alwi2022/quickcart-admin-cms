@@ -4,6 +4,7 @@ import { useEffect, useMemo, useState } from 'react';
 import Link from 'next/link';
 import { useRouter, useSearchParams } from 'next/navigation';
 import { fmtIDR } from '@/app/db/utils/format';
+import { AdminOrders } from './api';
 
 const STATUS = [
   { value: '', label: 'Semua status' },
@@ -15,43 +16,6 @@ const STATUS = [
   { value: 'cancelled', label: 'Cancelled' },
   { value: 'refunded', label: 'Refunded' },
 ];
-
-
-// lib/api/orders.js
-export async function apiFetch(path, opts = {}) {
-  const res = await fetch(path, {
-    credentials: 'include',
-    cache: 'no-store',
-    headers: { 'Content-Type': 'application/json', ...(opts.headers || {}) },
-    ...opts,
-  });
-  const data = await res.json().catch(() => ({}));
-  if (!res.ok) throw new Error(data?.error || 'Request error');
-  return data;
-}
-
-/** ===== Customer ===== */
-export const Orders = {
-  create: (payload) => apiFetch('/api/orders', { method: 'POST', body: JSON.stringify(payload) }),
-  listMine: (q = {}) => {
-    const usp = new URLSearchParams(q);
-    return apiFetch(`/api/orders?${usp.toString()}`);
-  },
-  getMine: (id) => apiFetch(`/api/orders/${id}`),
-  cancel: (id) => apiFetch(`/api/orders/${id}`, { method: 'PATCH', body: JSON.stringify({ action: 'cancel' }) }),
-};
-
-/** ===== Admin ===== */
-export const AdminOrders = {
-  list: (q = {}) => {
-    const usp = new URLSearchParams(q);
-    return apiFetch(`/api/admin/orders?${usp.toString()}`);
-  },
-  get: (id) => apiFetch(`/api/admin/orders/${id}`),
-  update: (id, payload) => apiFetch(`/api/admin/orders/${id}`, { method: 'PATCH', body: JSON.stringify(payload) }),
-};
-
-
 
 export default function AdminOrdersPage() {
   const router = useRouter();
