@@ -31,7 +31,7 @@ export default function AdminBrandsPage() {
     async function load(p = page) {
         setLoading(true);
         try {
-            const { items } = await ok(api.get('/api/admin/brands', { params: { page: p, limit, q } }));
+            const { items, total } = await ok(api.get('/api/admin/brands', { params: { page: p, limit, q } }));
             setRows(items || []);
             setTotal(total || 0);
 

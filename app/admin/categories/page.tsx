@@ -41,11 +41,13 @@ export default function AdminCategoriesPage() {
     async function load(p = page) {
         setLoading(true);
         try {
-            const { items, total } = await ok(api.get('/api/admin/categories', {
-                params: { page: p, limit, q }
-            }));
-            setRows(items || []);
-            setTotal(total || 0);
+            const [pageData, parentData] = await Promise.all([
+                ok(api.get('/api/admin/categories', { params: { page: p, limit, q } })),
+                ok(api.get('/api/admin/categories', { params: { page: 1, limit: 200, q: '' } })),
+            ]);
+            setRows(pageData?.items || []);
+            setTotal(pageData?.total || 0);
+            setParents(parentData?.items || []);
         } catch (e) {
             alert(e.message || 'Gagal memuat kategori');
         } finally {
@@ -86,7 +88,7 @@ export default function AdminCategoriesPage() {
         } else {
             setImages([]);
         }
-        setParentId(c.parent_id || '');
+        setParentId(String(c.parent_id || ''));
         setOrder(c.order || 0);
     }
 
@@ -303,7 +305,7 @@ export default function AdminCategoriesPage() {
                                     className="mt-1 w-full rounded-lg border border-zinc-300 px-3 py-2 focus:outline-none focus:ring-2 focus:ring-orange-500/30"
                                 >
                                     <option value="">(root)</option>
-                                    {parents.map(p => (
+                                    {parents.filter(p => String(p._id) !== String(editing)).map(p => (
                                         <option key={p._id} value={p._id}>
                                             {p.name}
                                         </option>

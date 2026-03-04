@@ -50,10 +50,10 @@ export default function AdminProductsPage() {
               <tr><td colSpan={6} className="px-3 py-6 text-center text-zinc-500">Loading...</td></tr>
             ) : data.items.length ? data.items.map(p => (
               <tr key={p._id} className="border-t">
-                <td className="px-3 py-2">{p.name}</td>
-                <td className="px-3 py-2">{p.brand?.name ?? '-'}</td>
-                <td className="px-3 py-2">{p.category?.name ?? '-'}</td>
-                <td className="px-3 py-2 text-right">Rp {Intl.NumberFormat('id-ID').format(p.sale_price ?? p.price ?? 0)}</td>
+                <td className="px-3 py-2">{p.title ?? p.name ?? '-'}</td>
+                <td className="px-3 py-2">{p.brandName ?? p.brand?.name ?? '-'}</td>
+                <td className="px-3 py-2">{(Array.isArray(p.categoryNames) && p.categoryNames.length ? p.categoryNames.join(', ') : p.category?.name) ?? '-'}</td>
+                <td className="px-3 py-2 text-right">Rp {Intl.NumberFormat('id-ID').format(p.price ?? p.sale_price ?? 0)}</td>
                 <td className="px-3 py-2 text-center">
                   <span className={`px-2 py-1 rounded text-xs ${p.status === 'active' ? 'bg-green-50 text-green-700' : 'bg-zinc-100 text-zinc-700'}`}>{p.status}</span>
                 </td>

@@ -8,7 +8,6 @@ export default function AdminNavbar() {
       <div className="mx-auto max-w-7xl px-4 py-3 flex items-center justify-between">
         <Link href="/admin" className="font-semibold">GalaTech Admin</Link>
         <nav className="text-sm flex items-center gap-4">
-          <Link href="/" className="hover:underline">Lihat Toko</Link>
           <LogoutButton className='hover:underline'/>
         </nav>
       </div>
